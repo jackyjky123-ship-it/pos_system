@@ -9,18 +9,19 @@ use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
         $products = Product::with('category')
             ->latest()
-            ->get()
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
         $categories = Category::orderBy('name')->get();
 
@@ -31,21 +32,13 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductRequest $request):RedirectResponse
+    public function store(StoreProductRequest $request): RedirectResponse
     {
         $data = $request->validated();
 
-        if($request->hasFile('image')) {
+        if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('products', 'public');
         }
 
@@ -55,42 +48,32 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
         $data = $request->validated();
 
-        if($request->hasFile('image')) {
-           Storage::disk('public')->delete($product->image);
+        if ($request->hasFile('image')) {
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+            $data['image'] = $request->file('image')->store('products', 'public');
+        } else {
+            unset($data['image']);
         }
-        $data['image'] = $request->file('image')->store('products', 'public');
 
         $product->update($data);
+
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product): RedirectResponse
     {
-        if($product->image) {
+        if ($product->image) {
             Storage::disk('public')->delete($product->image);
         }
 

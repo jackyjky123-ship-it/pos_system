@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -15,13 +17,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'is_active'])]
 class Product extends Model
 {
-    public function cast():array
+    /** @use HasFactory<ProductFactory> */
+    use HasFactory;
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
     {
         return [
-            'is_active'=> 'boolean',
-            'price'=> 'decimal:2',
+            'is_active' => 'boolean',
+            'price' => 'decimal:2',
         ];
     }
+
+    /**
+     * @return BelongsTo<Category, $this>
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
