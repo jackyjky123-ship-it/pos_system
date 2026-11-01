@@ -1,6 +1,5 @@
-
 import { Input } from '@/components/ui/input';
-import { Product, CartItem } from '@/types';
+import { Product } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { LayoutGrid, Search } from 'lucide-react';
 import { useState } from 'react';
@@ -20,7 +19,7 @@ export default function PosIndex({ products }: Props) {
 
     const filtered = products.filter(p =>
         p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.category.name.toLowerCase().includes(search.toLowerCase())
+        (p.category?.name ? p.category.name.toLowerCase().includes(search.toLowerCase()) : false)
     );
 
     return (
@@ -65,5 +64,5 @@ export default function PosIndex({ products }: Props) {
                 onClose={() => setShowCheckout(false)}
             />
         </>
-    )
+    );
 }

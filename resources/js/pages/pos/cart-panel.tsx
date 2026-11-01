@@ -1,12 +1,7 @@
-import { CartItem, Product } from '@/types';
+import { CartItem } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Trash2 } from 'lucide-react';
-
-interface CartItem {
-    product: { id: number; name: string; price: string; stock_quantity: number };
-    quantity: number;
-}
 
 interface Props {
     items: CartItem[];
@@ -29,7 +24,7 @@ export default function CartPanel({ items, subtotal, onRemove, onSetQuantity, on
                 )}
             </div>
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
-            {items.length === 0 ? (
+                {items.length === 0 ? (
                     <p className="text-sm text-muted-foreground text-center py-8">
                         No items yet.
                     </p>

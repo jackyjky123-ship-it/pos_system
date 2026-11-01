@@ -1,10 +1,5 @@
 import { Product } from '@/types';
 
-interface CartItem {
-    product: Product;
-    quantity: number;
-}
-
 interface Props {
     products: Product[];
     onAdd: (product: Product) => void;
@@ -13,10 +8,10 @@ interface Props {
 export default function ProductGrid({ products, onAdd }: Props) {
     if (products.length === 0) {
         return (
-            <div className='flex flex-1 items-center justify-center text-muted-foreground'>
-                No Products found.
+            <div className="flex flex-1 items-center justify-center text-muted-foreground">
+                No products found.
             </div>
-        )
+        );
     }
 
     return (
@@ -25,24 +20,25 @@ export default function ProductGrid({ products, onAdd }: Props) {
                 {products.map(product => (
                     <button
                         key={product.id}
+                        type="button"
                         onClick={() => onAdd(product)}
                         className="group flex flex-col overflow-hidden rounded-xl border bg-card text-left transition-all hover:border-primary hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                     >
-                    {product.image ?(
-                        <img
-                            src={`/storage/${product.image}`}
-                            alt={product.name}
-                            className="aspect-square w-full object-cover"
-                        />
-                    ) : (
-                        <div className="flex aspect-square w-full items-center justify-center bg-muted text-3xl text-muted-foreground">
-                            {product.name.charAt(0)}
-                        </div>
-                    )}
-                        <div className='p-2'>
-                                <p className="truncate text-sm font-medium">{product.name}</p>
-                                <p className="text-sm font-bold text-primary">${product.price}</p>
-                                <p className="text-xs text-muted-foreground">Stock: {product.stock_quantity}</p>
+                        {product.image ? (
+                            <img
+                                src={`/storage/${product.image}`}
+                                alt={product.name}
+                                className="aspect-square w-full object-cover"
+                            />
+                        ) : (
+                            <div className="flex aspect-square w-full items-center justify-center bg-muted text-3xl text-muted-foreground">
+                                {product.name.charAt(0)}
+                            </div>
+                        )}
+                        <div className="p-2">
+                            <p className="truncate text-sm font-medium">{product.name}</p>
+                            <p className="text-sm font-bold text-primary">${product.price}</p>
+                            <p className="text-xs text-muted-foreground">Stock: {product.stock_quantity}</p>
                         </div>
                     </button>
                 ))}

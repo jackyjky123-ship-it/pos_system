@@ -8,16 +8,16 @@ use Inertia\Response as InertiaResponse;
 
 class PosController extends Controller
 {
-    public function index():InertiaResponse
+    public function index(): InertiaResponse
     {
         $products = Product::with('category')
-        ->where('is_active', true)
-        ->where('stock', '>', 0)
-        ->orderBy('name')
-        ->get();
+            ->where('is_active', true)
+            ->where('stock_quantity', '>', 0)
+            ->orderBy('name')
+            ->get();
 
         return Inertia::render('pos/index', [
-            'products' => $products
+            'products' => $products,
         ]);
     }
 }
